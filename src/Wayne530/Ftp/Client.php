@@ -2,6 +2,7 @@
 
 namespace Wayne530\Ftp;
 use Wayne530\Ftp\Exception\AuthenticationException;
+use Wayne530\Ftp\Exception\InvalidImplementationException;
 
 /**
  * FTP/FTPS/SFTP connection factory
@@ -19,6 +20,7 @@ class Client {
      * connection factory
      *
      * @throws AuthenticationException
+     * @throws InvalidImplementationException
      *
      * @param string $type  connection type (see constants above)
      * @param string $host  host or ip to connect to
@@ -30,6 +32,9 @@ class Client {
      */
     public static function createConnection($type = self::TYPE_SFTP, $host, $username, $password, $port = null) {
         $implementationClass = __NAMESPACE__ . '\\' . ucfirst($type);
+        if (! class_exists($implementationClass)) {
+            throw new InvalidImplementationException('Invalid implementation ' . $type . ' specified');
+        }
         /** @var Client_Interface $implementation */
         $implementation = new $implementationClass($host, $port);
         if (! $implementation->authenticate($username, $password)) {
