@@ -33,7 +33,7 @@ class Client {
     public static function createConnection($type = self::TYPE_SFTP, $host, $username, $password, $port = null) {
         $implementationClass = __NAMESPACE__ . '\\' . ucfirst($type);
         if (! class_exists($implementationClass)) {
-            throw new InvalidImplementationException('Invalid implementation ' . $type . ' specified');
+            throw new InvalidImplementationException('Invalid implementation ' . $type . ' specified; could not find class ' . $implementationClass);
         }
         /** @var Client_Interface $implementation */
         $implementation = new $implementationClass($host, $port);
