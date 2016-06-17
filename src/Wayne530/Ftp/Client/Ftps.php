@@ -13,7 +13,7 @@ class Ftps extends Ftp implements Client_Interface {
 
     /** @override */
     public function connect($host, $port) {
-        return ftp_ssl_connect($host, $port);
+        return @ftp_ssl_connect($host, $port);
     }
 
 }

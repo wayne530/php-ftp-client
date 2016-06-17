@@ -11,13 +11,25 @@ use Wayne530\Ftp\Client_Interface;
  */
 class Ftp extends Base implements Client_Interface {
 
+    /** @var int  default timeout value */
+    protected $timeout = 10;
+
+    /** @override */
+    public function __destruct() {
+        if (is_resource($this->connection)) {
+            ftp_close($this->connection);
+        }
+        parent::__destruct();
+    }
+
     /** @inheritDoc */
     public function connect($host, $port) {
-        return ftp_connect($host, $port);
+        return @ftp_connect($host, $port);
     }
 
     /** @inheritDoc */
     public function authenticate($username, $password) {
+        @ftp_set_option($this->connection, FTP_TIMEOUT_SEC, $this->timeout);
         return @ftp_login($this->connection, $username, $password);
     }
 
