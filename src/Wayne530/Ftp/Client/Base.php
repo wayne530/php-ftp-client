@@ -49,7 +49,7 @@ abstract class Base implements Client_Interface {
      * @return string
      */
     public function getType() {
-        return __CLASS__;
+        return (new \ReflectionClass($this))->getShortName();
     }
 
 }
